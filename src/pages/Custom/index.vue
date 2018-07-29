@@ -5,8 +5,8 @@
     <div class="content">
       <div class="main">
         <iframe class="iframe"
-          frameborder=0
-          scrolling=auto
+          frameborder="0"
+          scrolling="auto"
           src="https://weixin.btevolution.com/www/"></iframe>
         <cart/>
       </div>
@@ -28,6 +28,11 @@ export default {
     Tools,
     Cart,
     Bottom
+  },
+  created () {
+    window.clearCart = () => {
+      console.log(1)
+    }
   },
   data () {
     return {
