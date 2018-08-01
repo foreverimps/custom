@@ -1,5 +1,7 @@
 <template>
   <div class="header-bar">
+    <div v-if="name!==undefined"
+      class="header-name">{{name}}</div>
     <div class="section">
       <img class="logo"
         src="../../assets/home_logo.png">
@@ -32,6 +34,12 @@ export default {
       }
     }
   },
+  props: {
+    name: {
+      type: String,
+      default: undefined
+    }
+  },
   methods: {
     toggleMenu () {
       this.flag.order = !this.flag.order
@@ -51,6 +59,17 @@ export default {
   padding-left: 25px;
   padding-right: 40px;
   box-shadow: 0rem 0.44rem 0.5rem 0rem rgba(188, 188, 188, 0.16);
+  z-index: 3;
+  position: relative;
+  .header-name {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: #333333;
+    font-size: 27px;
+    font-weight: bold;
+  }
   .section {
     display: flex;
     align-items: center;

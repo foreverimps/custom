@@ -1,8 +1,6 @@
 <template>
   <div class="page">
     <div class="dialog">
-      <img class="logo"
-        src="../../assets/login_pic.png">
       <div class="item username">
         <div class="icon"></div>
         <input v-model="form.phone"
@@ -63,7 +61,7 @@ export default {
 .page {
   width: 100%;
   min-height: 100vh;
-  background: url('../../assets/login_bg.png');
+  background: url('../../assets/login/login_bg@3x.png');
   background-repeat: no-repeat;
   background-size: 100%;
   display: flex;
@@ -80,11 +78,6 @@ export default {
     padding-top: 100px;
     position: relative;
     box-shadow: 0px 20px 21px 0px rgba(0, 0, 0, 0.2);
-    .logo {
-      position: absolute;
-      top: 0;
-      left: 48px;
-    }
     .item {
       width: 410px;
       display: flex;
@@ -107,12 +100,12 @@ export default {
     }
     .item.username {
       .icon {
-        background-image: url('../../assets/login_user_icon.png');
+        background-image: url('../../assets/login/login_user_icon@3x.png');
       }
     }
     .item.smscode {
       .icon {
-        background-image: url('../../assets/login_ver_icon.png');
+        background-image: url('../../assets/login/login_ver_icon@3x.png');
       }
       .button {
         width: 120px;

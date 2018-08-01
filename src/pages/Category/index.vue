@@ -59,20 +59,6 @@
   </page>
 </template>
 
-<script>
-import Page from '../../components/Page'
-
-export default {
-  components: {
-    Page
-  },
-  data () {
-    return {
-    }
-  }
-}
-</script>
-
 <style lang="less" scoped>
 .header-name {
   font-size: 20px;

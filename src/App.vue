@@ -9,8 +9,16 @@
   font-size: 16px;
   box-sizing: border-box;
 }
-input {
+textarea,
+input,
+select {
   border: none;
   outline: none;
+  background-color: transparent;
+}
+.center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 </style>

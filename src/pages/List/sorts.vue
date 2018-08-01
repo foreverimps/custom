@@ -25,6 +25,7 @@ export default {
   padding-top: 40px;
   background-color: #f4f6f8;
   z-index: 1;
+  box-shadow: 0.44rem 0rem 0.5rem 0rem rgba(188, 188, 188, 0.08);
   .item {
     padding-left: 30px;
     display: flex;

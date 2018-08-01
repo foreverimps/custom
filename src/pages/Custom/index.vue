@@ -15,7 +15,6 @@
 </template>
 
 <script>
-import Page from '../../components/Page'
 import Display from './display'
 import Tools from './tools'
 import Cart from './cart'
@@ -23,7 +22,6 @@ import Bottom from './bottom'
 
 export default {
   components: {
-    Page,
     Display,
     Tools,
     Cart,

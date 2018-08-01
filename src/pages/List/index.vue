@@ -17,14 +17,12 @@
 </template>
 
 <script>
-import Page from '../../components/Page'
 import Categorys from './categorys.vue'
 import Sorts from './sorts.vue'
 import MainMenu from './main-menu'
 
 export default {
   components: {
-    Page,
     Categorys,
     Sorts,
     MainMenu

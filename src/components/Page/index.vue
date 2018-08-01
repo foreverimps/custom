@@ -1,6 +1,6 @@
 <template>
   <div :class="['page',type]">
-    <header-bar>
+    <header-bar :name="name">
       <slot slot="left"
         name="left" />
       <slot slot="right"
@@ -18,6 +18,10 @@ export default {
   },
   props: {
     type: {
+      type: String,
+      default: undefined
+    },
+    name: {
       type: String,
       default: undefined
     }
