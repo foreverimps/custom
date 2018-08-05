@@ -8,21 +8,59 @@
       <img class="arrow"
         src="../../assets/detail/ion-ios-arrow-left - Ionicons Copy.png">
       <div class="content">
-        <img src="../../assets/detail/f67c1913aa70bcccec928696db0f877d copy.png">
+        <img :src="product.icon">
       </div>
       <img class="arrow"
         src="../../assets/detail/ion-ios-arrow-right - Ionicons Copy.png">
     </div>
     <div class="bottom">
       <div class="footer">
-        东辰瞑瀚 美式loft实木电脑桌办公桌实木胡桃木 02563
+        {{product.itemDescription}}
       </div>
-      <div class="add-cart-button">
+      <div class="add-cart-button"
+        @click="onAdd">
         加入购物车
       </div>
     </div>
   </div>
 </template>
+
+<script>
+import { getProductDetail, addCart } from './api'
+export default {
+  data () {
+    return {
+      product: {}
+    }
+  },
+  methods: {
+    async getProductDetail () {
+      const params = {
+        productId: this.$route.query.productId
+      }
+      const { result } = await getProductDetail(params)
+      this.product = result
+    },
+    async addCart () {
+      const params = {
+        shoppingCart: {
+          productId: Number(this.$route.query.productId),
+          productNum: 1
+        }
+      }
+      const result = await addCart(params)
+      console.log(result)
+    },
+    onAdd () {
+      this.addCart()
+    }
+  },
+  created () {
+    this.getProductDetail()
+  }
+}
+</script>
+
 
 <style lang="less" scoped>
 .page {

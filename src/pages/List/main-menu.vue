@@ -1,67 +1,123 @@
 <template>
   <div class="main-menu">
     <div class="title">
-      <div>当季最热</div>
+      <div class="active">当季最热</div>
       <div>排行榜</div>
       <div>销量</div>
       <div>星评</div>
     </div>
-    <div class="content">
-      <div class="section first">
-        <div v-for="(item,index) in data"
+    <div class="main-content">
+      <div v-for="(section,sectionIndex) in data"
+        :key="sectionIndex"
+        :class="['section',sectionIndex===0?'first':undefined]">
+        <div v-for="(item,index) in section"
           :key="index"
-          :class="['item',index===0?'first':undefined]">
-          <div class="image">
-            <img :src="item.img">
-          </div>
-          <div class="name">{{item.name}}</div>
-          <div class="line">
-            <stars class="stars"
-              :number="item.star" />
-            <div class="button">定制</div>
-          </div>
-          <div class="footer">
-            <div>热度 {{item.hot}}</div>
-            <div>排行 {{item.sort}}</div>
-            <div>销量 {{item.amount}}</div>
+          :class="[
+          'item',
+          index===0 ? 'first' : undefined,
+          item.id===undefined ? 'empty' : undefined
+          ]">
+          <div v-if="item.id!==undefined">
+            <div class="image">
+              <img :src="item.icon">
+            </div>
+            <div class="name">{{item.name}}</div>
+            <div class="line">
+              <stars class="stars"
+                :number="item.starLevel" />
+              <div class="button"
+                @click="toDetail(item.id)">定制</div>
+            </div>
+            <div class="footer">
+              <div>热度 {{item.hotNum}}</div>
+              <div>排行 {{item.rankingNum}}</div>
+              <div>销量 {{item.saleNum}}</div>
+            </div>
           </div>
         </div>
       </div>
-      <div class="section">
-        <div v-for="(item,index) in data"
-          :key="index"
-          :class="['item',index===0?'first':undefined]">
-          <div class="image">
-            <img :src="item.img">
-          </div>
-          <div class="name">{{item.name}}</div>
-          <div class="line">
-            <stars class="stars"
-              :number="item.star" />
-            <div class="button">定制</div>
-          </div>
-          <div class="footer">
-            <div>热度 {{item.hot}}</div>
-            <div>排行 {{item.sort}}</div>
-            <div>销量 {{item.amount}}</div>
-          </div>
-        </div>
-      </div>
+    </div>
+    <div class="buttons center">
+      <div v-if="page>0"
+        class="button center"
+        @click="onPrev">上一页</div>
+      <div>当前第{{page+1}}页</div>
+      <div v-if="hasNextPage()"
+        class="button center"
+        @click="onNext">下一页</div>
     </div>
   </div>
 </template>
 
 <script>
 import Stars from './stars'
-import menuItems from './menu-items'
+import { getProducts } from './api'
+
 export default {
   components: {
     Stars
   },
   data () {
     return {
-      data: menuItems
+      data: [],
+      page: 0,
+      size: 20,
+      total: 0
     }
+  },
+  methods: {
+    onPrev () {
+      this.page = this.page - 1
+      this.getProducts()
+    },
+    onNext () {
+      this.page = this.page + 1
+      this.getProducts()
+    },
+    hasNextPage () {
+      if (this.total % this.size === 0) {
+        return this.page < this.total / this.size - 1
+      } else {
+        return this.page < parseInt(this.total / this.size)
+      }
+    },
+    formatData (origin) {
+      const temp = origin.reduce(
+        (result, item, index) => {
+          const sectionIndex = parseInt(index / 4)
+          if (result[sectionIndex] === undefined) {
+            result[sectionIndex] = []
+          }
+          result[sectionIndex] = [...result[sectionIndex], item]
+          return result
+        },
+        []
+      )
+      return temp.map((section, sectionIndex) => {
+        if (sectionIndex === temp.length - 1) {
+          for (; section.length < 4;) {
+            section = [...section, {}]
+          }
+        }
+        return section
+      })
+    },
+    async getProducts () {
+      const params = {
+        functionalArea: this.$route.query.areaId,
+        page: this.page,
+        size: this.size
+      }
+      const { result: { records, total } } = await getProducts(params)
+      this.data = this.formatData(records)
+      this.total = total
+    },
+    toDetail (id) {
+      this.$router.push({ name: 'detail', query: { productId: id } })
+    }
+  },
+  created () {
+    this.getProducts()
   }
 }
 </script>
@@ -69,6 +125,8 @@ export default {
 <style lang="less" scoped>
 .main-menu {
   flex: 1;
+  height: 90vh;
+  overflow-y: auto;
   .title {
     display: flex;
     height: 60px;
@@ -77,9 +135,16 @@ export default {
       display: flex;
       justify-content: center;
       align-items: center;
+      &.active {
+        color: #cab58c;
+        font-size: 17px;
+        font-weight: bold;
+      }
     }
   }
-  .content {
+  .main-content {
+    flex: 1;
+    margin-right: 6px;
     .section {
       display: flex;
       border-bottom: 1px solid #ccc;
@@ -92,6 +157,9 @@ export default {
         padding: 0 12px;
         &.first {
           border-left: 1px solid #ccc;
+        }
+        &.empty {
+          border: none;
         }
         .image {
           height: 250px;
@@ -133,6 +201,19 @@ export default {
           margin-bottom: 15px;
         }
       }
+    }
+  }
+  .buttons {
+    margin: 10px 0;
+    .button {
+      border: 1px solid #ab9d80;
+      border-radius: 3px;
+      width: 170px;
+      height: 40px;
+      font-size: 15px;
+      font-weight: bold;
+      color: #ab9d80;
+      margin: 0 10px;
     }
   }
 }

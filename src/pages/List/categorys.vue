@@ -1,59 +1,53 @@
 <template>
-  <div class="categorys">
+  <div class="sorts">
     <div v-for="(category,index) in categorys"
       :key="index"
-      @click="()=>onSelectCategory(index)"
-      :class="['item', index === value ? 'active' : undefined]">
-      <div class="name">{{category.name}}</div>
-      <div class="en-name">{{category.enName}}</div>
+      class="item">
+      <img :src="category.icon"> {{category.shortName}}
     </div>
   </div>
 </template>
 
 <script>
-import categorys from './categorys'
+import { getCategorys } from './api'
 export default {
   data () {
     return {
-      value: 0,
-      categorys
+      categorys: []
     }
   },
   methods: {
-    onSelectCategory (index) {
-      this.value = index
+    async getCategorys () {
+      const { result } = await getCategorys()
+      this.categorys = result
     }
+  },
+  created () {
+    this.getCategorys()
   }
 }
 </script>
 
 <style lang="less" scoped>
-.categorys {
+.sorts {
   width: 150px;
+  padding-top: 40px;
   background-color: #f4f6f8;
-  padding-top: 30px;
-  box-shadow: 8px 0px 7px 0px rgba(188, 188, 188, 0.16);
-  z-index: 2;
+  z-index: 1;
+  box-shadow: 0.44rem 0rem 0.5rem 0rem rgba(188, 188, 188, 0.08);
+  height: 90vh;
+  overflow: auto;
   .item {
-    padding: 8px 0 8px 15px;
-    color: #4e312f;
-    &.active {
-      background-color: #e3cda1;
-    }
-    .name {
-      font-size: 20px;
-      font-weight: bold;
-      max-width: 100%;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
-    }
-    .en-name {
-      font-size: 10px;
-      max-width: 100%;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
+    padding-left: 30px;
+    display: flex;
+    align-items: center;
+    color: #cab58c;
+    margin-bottom: 25px;
+    img {
+      width: 30px;
+      height: 30px;
+      border: 1px dashed #333333;
+      margin-right: 8px;
     }
   }
 }

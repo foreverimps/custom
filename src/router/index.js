@@ -2,14 +2,15 @@ import Vue from 'vue';
 import Router from 'vue-router';
 import Login from '@/pages/Login';
 
+import Welcome from '@/pages/Welcome';
 import Home from '@/pages/Home';
-import Category from '@/pages/Category';
 import List from '@/pages/List';
 import Custom from '@/pages/Custom';
 import Detail from '@/pages/Detail';
 import Orders from '@/pages/Orders';
 import ExtraData from '@/pages/ExtraData';
 import Service from '@/pages/Service';
+import Preview from '@/pages/Preview';
 
 Vue.use(Router);
 
@@ -30,9 +31,9 @@ export default new Router({
       component: Home
     },
     {
-      path: '/category',
-      name: 'category',
-      component: Category
+      path: '/welcome',
+      name: 'welcome',
+      component: Welcome
     },
     {
       path: '/list',
@@ -63,6 +64,11 @@ export default new Router({
       path: '/service',
       name: 'service',
       component: Service
+    },
+    {
+      path: '/preview',
+      name: 'preview',
+      component: Preview
     }
   ]
 });

@@ -9,22 +9,22 @@
       <div>东晨明翰东环路店</div>
     </div>
     <div class="content">
+      <areas/>
       <categorys/>
-      <sorts/>
       <main-menu/>
     </div>
   </page>
 </template>
 
 <script>
+import Areas from './areas.vue'
 import Categorys from './categorys.vue'
-import Sorts from './sorts.vue'
 import MainMenu from './main-menu'
 
 export default {
   components: {
+    Areas,
     Categorys,
-    Sorts,
     MainMenu
   },
   data () {
@@ -65,7 +65,7 @@ export default {
   }
 }
 .content {
-  width: 100%;
+  width: 100vw;
   display: flex;
   box-shadow: 0.63rem 0rem 0.5rem 0rem rgba(188, 188, 188, 0.16);
 }

@@ -38,19 +38,40 @@ export default {
     }
   },
   methods: {
-    getSmsCode () {
-      const params = {
-        phone: this.form.phone,
-        smsType: 1
+    async getSmsCode () {
+      const isPhoneNumber = /^\d{11}$/.test(this.form.phone)
+      if (isPhoneNumber) {
+        const params = {
+          phone: this.form.phone,
+          smsType: 1
+        }
+        const { result } = await getSmsCode(params)
+        alert(result)
+      } else {
+        alert('请输入正确的手机号')
       }
-      getSmsCode(params)
     },
-    onLogin () {
-      const params = {
-        phone: this.form.phone,
-        smsCode: this.form.smsCode
+    async onLogin () {
+      try {
+        const isPhoneNumber = /^\d{11}$/.test(this.form.phone)
+        const hasSmscode = this.form.smsCode !== undefined
+        if (isPhoneNumber && hasSmscode) {
+          const params = {
+            phone: this.form.phone,
+            smsCode: this.form.smsCode
+          }
+          const { result } = await loginByPhone(params)
+          localStorage.setItem('token', result)
+          this.$router.push({ name: 'home' })
+        } else {
+          alert('请输入正确的手机号或验证码')
+        }
+      } catch (error) {
+        if (error.response !== undefined) {
+          const { response: { data: { msg } } } = error
+          alert(msg)
+        }
       }
-      loginByPhone(params)
     }
   }
 }
