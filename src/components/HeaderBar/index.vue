@@ -4,20 +4,32 @@
       class="header-name">{{name}}</div>
     <div class="section">
       <img class="logo"
-        src="../../assets/home_logo.png">
+        src="../../assets/home/home_logo@3x.png">
+      <div @click="toBack"
+        class="button">
+        返回
+      </div>
+      <div @click="toHome"
+        class="button">
+        首页
+      </div>
       <slot name="left" />
     </div>
     <div class="section">
       <slot name="right" />
       <div class="icon">
-        <img src="../../assets/header-phone.png">
+        <img src="../../assets/home/电话@3x.png">
       </div>
       <div class="icon user">
-        <img @click="toggleMenu"
-          src="../../assets/header-user.png">
-        <div v-show="flag.order"
+        <img @mouseover="showMenu"
+          @mouseout="hideMenu"
+          src="../../assets/home/登录头像@3x.png">
+        <div @mouseover="showMenu"
+          @mouseout="hideMenu"
+          v-show="flag.order"
           class="drop-menu">
-          <div class="order">订单</div>
+          <div @click="toOrders"
+            class="order">订单</div>
           <div>注销</div>
         </div>
       </div>
@@ -41,8 +53,20 @@ export default {
     }
   },
   methods: {
-    toggleMenu () {
-      this.flag.order = !this.flag.order
+    showMenu () {
+      this.flag.order = true
+    },
+    hideMenu () {
+      this.flag.order = false
+    },
+    toOrders () {
+      this.$router.push({ name: 'orders' })
+    },
+    toBack () {
+      this.$router.go(-1)
+    },
+    toHome () {
+      this.$router.push({ name: 'home' })
     }
   }
 }
@@ -73,6 +97,9 @@ export default {
   .section {
     display: flex;
     align-items: center;
+    .button {
+      margin: 0 25px;
+    }
     .logo {
       width: 45px;
       height: 45px;

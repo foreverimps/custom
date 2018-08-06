@@ -17,7 +17,8 @@
           index===0 ? 'first' : undefined,
           item.id===undefined ? 'empty' : undefined
           ]">
-          <div v-if="item.id!==undefined">
+          <div v-if="item.id!==undefined"
+            @click="toDetail(item)">
             <div class="image">
               <img :src="item.icon">
             </div>
@@ -25,8 +26,9 @@
             <div class="line">
               <stars class="stars"
                 :number="item.starLevel" />
-              <div class="button"
-                @click="toDetail(item.id)">定制</div>
+              <div v-if="item.parentCode!==null"
+                class="button"
+                @click.stop="toCustom(item)">定制</div>
             </div>
             <div class="footer">
               <div>热度 {{item.hotNum}}</div>
@@ -112,7 +114,11 @@ export default {
       this.data = this.formatData(records)
       this.total = total
     },
-    toDetail (id) {
+    toCustom ({ itemCode, name }) {
+      const url = `https://weixin.btevolution.com/www/${itemCode}/${name}`
+      window.open(url, '__self')
+    },
+    toDetail ({ id }) {
       this.$router.push({ name: 'detail', query: { productId: id } })
     }
   },
@@ -144,10 +150,9 @@ export default {
   }
   .main-content {
     flex: 1;
-    margin-right: 6px;
+    margin: 0 6px;
     .section {
       display: flex;
-      border-bottom: 1px solid #ccc;
       &.first {
         border-top: 1px solid #ccc;
       }
@@ -155,6 +160,7 @@ export default {
         flex: 1;
         border-right: 1px solid #ccc;
         padding: 0 12px;
+        border-bottom: 1px solid #ccc;
         &.first {
           border-left: 1px solid #ccc;
         }
@@ -171,7 +177,7 @@ export default {
           color: #333333;
           font-weight: bold;
           margin: 15px 0;
-          max-width: 100%;
+          max-width: 250px;
           overflow: hidden;
           text-overflow: ellipsis;
           white-space: nowrap;

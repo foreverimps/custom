@@ -1,9 +1,5 @@
 <template>
   <page name="订单">
-    <div slot="left">
-      <span>返回</span>
-      <span>首页</span>
-    </div>
     <div slot="right">东辰明瀚东环路店</div>
     <div class="orders">
       <main-content/>

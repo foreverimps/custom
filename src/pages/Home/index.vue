@@ -3,7 +3,10 @@
     <div slot="header-right"
       class="header-name">东辰明瀚东环路店</div>
     <div class="content">
-      <div v-for="(area) in areas"
+      <img @click="onPrev"
+        class="arrow"
+        src="../../assets/detail/ion-ios-arrow-left - Ionicons Copy.png">
+      <div v-for="(area) in display"
         :key="area.id"
         class="item"
         @click="toList(area.id)">
@@ -19,6 +22,9 @@
           </div>
         </div>
       </div>
+      <img @click="onNext"
+        class="arrow"
+        src="../../assets/detail/ion-ios-arrow-right - Ionicons Copy.png">
       <!-- <div class="item livingroom"
         @click="toList">
         <div class="image">
@@ -85,7 +91,8 @@ import { getAreas } from './api'
 export default {
   data () {
     return {
-      areas: []
+      areas: [],
+      display: []
     }
   },
   methods: {
@@ -95,6 +102,22 @@ export default {
     async getAreas () {
       const { result } = await getAreas()
       this.areas = result
+      this.display = this.areas.filter((_, index) => index < 4)
+    },
+    onPrev () {
+      const [{ id: firstId }] = this.display
+      const firstIndex = this.areas.findIndex(({ id }) => id === firstId)
+      if (firstIndex > 0) {
+        this.display = [this.areas[firstIndex - 1], ...this.display.filter((_, index) => index !== 3)]
+      }
+    },
+    onNext () {
+      const { id: lastId } = this.display[3]
+      const lastIndex = this.areas.findIndex(({ id }) => id === lastId)
+      if (lastIndex < this.areas.length - 1) {
+        const [first, ...others] = this.display
+        this.display = [...others, this.areas[lastIndex + 1]]
+      }
     }
   },
   created () {
@@ -112,6 +135,12 @@ export default {
   display: flex;
   width: 100%;
   justify-content: center;
+  align-items: center;
+  .arrow {
+    width: 30px;
+    height: 50px;
+    margin: 0 48px;
+  }
   .item {
     width: 360px;
     height: 730px;

@@ -1,38 +1,124 @@
 <template>
   <div class="main-content">
-    <div v-for="item in 10"
-      :key="item"
+    <div v-for="cart in carts"
+      :key="cart.id"
       class="item">
       <div class="checkbox-outer">
-        <div class="checkbox"></div>
+        <img v-if="cart.selected"
+          class="checkbox"
+          @click="onToggle(cart)"
+          src="../../assets/orders/check_selected@3x.png">
+        <img v-else
+          @click="onToggle(cart)"
+          class="checkbox"
+          src="../../assets/orders/order_check_normal@3x.png">
       </div>
       <div class="content">
         <div class="left">
           <div class="image center">
-            <img src="../../assets/orders/f67c1913aa70bcccec928696db0f877d@3x.png">
+            <img :src="cart.icon">
           </div>
           <div class="detail">
-            <div class="name">东辰瞑瀚 美式loft实木电脑桌办公桌实木胡桃木办公桌床头柜 02563</div>
-            <div class="price">965.00</div>
+            <div class="name">{{cart.name}}</div>
+            <div class="price">{{cart.price}}</div>
           </div>
         </div>
         <div class="right buttons">
-          <input-number/>
-          <div class="button center">
+          <input-number v-model="cart.amount" />
+          <div @click="onEdit(cart)"
+            class="button center">
             <img class="icon"
               src="../../assets/orders/order_edit_icon@3x.png"> 编辑
           </div>
         </div>
       </div>
     </div>
+    <div class="bottom">
+      <div class="amount-all">共 {{getAmountAll()}} 件</div>
+      <div class="price-all">合计： {{getPriceAll()}}</div>
+      <div class="submit-button center"
+        @click="onSubmit">确认并支付</div>
+    </div>
   </div>
 </template>
 
 <script>
+import { getCart, editCart, createOrder } from './api'
 import InputNumber from './input-number'
 export default {
   components: {
     InputNumber
+  },
+  data () {
+    return {
+      carts: []
+    }
+  },
+  methods: {
+    async getCart () {
+      const params = {
+        page: 1,
+        size: 10000
+      }
+      const { result: { records } } = await getCart(params)
+      this.carts = records.map(({ productNum, price, ...others }) => ({
+        ...others,
+        amount: parseInt(productNum),
+        price: price.toFixed(2),
+        selected: false
+      }))
+    },
+    onToggle ({ id: targetId, selected }) {
+      this.carts = this.carts.map((item) => {
+        if (item.id === targetId) {
+          return {
+            ...item,
+            selected: !selected
+          }
+        }
+        return item
+      })
+    },
+    async onEdit ({ id, amount }) {
+      const params = {
+        productId: id,
+        productNum: amount
+      }
+      const { result } = await editCart(params)
+      alert(result)
+    },
+    getAmountAll () {
+      return this.carts.reduce(
+        (result, { amount }) => {
+          return result + amount
+        },
+        0
+      )
+    },
+    getPriceAll () {
+      return this.carts.reduce(
+        (result, { amount, price }) => {
+          return result + amount * price
+        },
+        0
+      ).toFixed(2)
+    },
+    async onSubmit () {
+      const carts = this.carts
+        .filter(({ selected }) => selected)
+      if (carts.length > 0) {
+        const params =
+          carts
+            .map(({ id, amount }) => ({ productId: id, productNum: amount }))
+        const { msg } = await createOrder(params)
+        alert(msg)
+      } else {
+        alert('请选择商品')
+      }
+    }
+  },
+  created () {
+    this.getCart()
   }
 }
 </script>
@@ -43,6 +129,7 @@ export default {
   height: 90vh;
   overflow: auto;
   padding-bottom: 80px;
+  position: relative;
   .item {
     display: flex;
     align-items: center;
@@ -55,7 +142,6 @@ export default {
       .checkbox {
         width: 28px;
         height: 28px;
-        border: 1px solid #ccc;
       }
     }
     .content {
@@ -110,8 +196,40 @@ export default {
           font-size: 15px;
           color: #ab9d80;
           font-weight: bold;
+          user-select: none;
         }
       }
+    }
+  }
+  .bottom {
+    width: 100%;
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    height: 80px;
+    display: flex;
+    align-items: center;
+    padding-left: 50px;
+    border-top: 1px solid #d8d8d8;
+    .amount-all {
+      font-size: 15px;
+      color: #787886;
+    }
+    .price-all {
+      margin-left: 30px;
+      color: #333333;
+      font-size: 20px;
+    }
+    .submit-button {
+      position: absolute;
+      right: 0;
+      bottom: 0;
+      width: 200px;
+      height: 100%;
+      background-color: #e3cda1;
+      font-size: 20px;
+      color: #4e312f;
+      font-weight: bold;
     }
   }
 }

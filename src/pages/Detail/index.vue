@@ -1,7 +1,8 @@
 <template>
   <div class="page">
     <div class="title">
-      <img class="close-button"
+      <img @click="toBack"
+        class="close-button"
         src="../../assets/detail/made_all_scr_close.png">
     </div>
     <div class="carousel">
@@ -42,17 +43,23 @@ export default {
       this.product = result
     },
     async addCart () {
-      const params = {
-        shoppingCart: {
+      try {
+        const params = {
           productId: Number(this.$route.query.productId),
           productNum: 1
         }
+        const { msg } = await addCart(params)
+        alert(msg)
+      } catch (error) {
+        console.error(error)
+        alert('失败，请稍后重试')
       }
-      const result = await addCart(params)
-      console.log(result)
     },
     onAdd () {
       this.addCart()
+    },
+    toBack () {
+      this.$router.go(-1)
     }
   },
   created () {
