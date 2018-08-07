@@ -2,10 +2,14 @@
   <page name="支付-补充资料">
     <div class="extra-data center">
       <div class="form">
-        <process/>
-        <!-- <contact-handler/> -->
-        <!-- <address-handler/> -->
-        <remark-handler/>
+        <process :step="step"
+          @handleStep="handleStep" />
+        <contact-handler v-show="step===0"
+          @handleStep="handleStep" />
+        <address-handler v-show="step===1"
+          @handleStep="handleStep" />
+        <remark-handler v-show="step===2"
+          @handleStep="handleStep" />
       </div>
     </div>
   </page>
@@ -23,6 +27,16 @@ export default {
     ContactHandler,
     AddressHandler,
     RemarkHandler
+  },
+  data () {
+    return {
+      step: 0
+    }
+  },
+  methods: {
+    handleStep (step) {
+      this.step = step
+    }
   }
 }
 </script>

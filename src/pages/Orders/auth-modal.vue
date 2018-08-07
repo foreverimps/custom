@@ -1,5 +1,5 @@
 <template>
-  <modal>
+  <modal v-if="visible">
     <div class="auth">
       <div class="tooltip">请输入权限密码</div>
       <input placeholder="6位数权限密码"
@@ -13,6 +13,19 @@ import Modal from './modal'
 export default {
   components: {
     Modal
+  },
+  data () {
+    return {
+      visible: false
+    }
+  },
+  methods: {
+    showModal () {
+      this.visible = true
+    },
+    hideModal () {
+      this.visible = false
+    }
   }
 }
 </script>

@@ -1,34 +1,50 @@
 <template>
   <div class="main-content">
-    <div v-for="cart in carts"
-      :key="cart.id"
-      class="item">
-      <div class="checkbox-outer">
-        <img v-if="cart.selected"
-          class="checkbox"
-          @click="onToggle(cart)"
-          src="../../assets/orders/check_selected@3x.png">
-        <img v-else
-          @click="onToggle(cart)"
-          class="checkbox"
-          src="../../assets/orders/order_check_normal@3x.png">
-      </div>
-      <div class="content">
-        <div class="left">
-          <div class="image center">
-            <img :src="cart.icon">
-          </div>
-          <div class="detail">
-            <div class="name">{{cart.name}}</div>
-            <div class="price">{{cart.price}}</div>
-          </div>
+    <div class="wraper">
+      <div v-for="cart in carts"
+        :key="cart.id"
+        class="item">
+        <div class="checkbox-outer">
+          <img v-if="cart.selected"
+            class="checkbox"
+            @click="onToggle(cart)"
+            src="../../assets/orders/check_selected@3x.png">
+          <img v-else
+            @click="onToggle(cart)"
+            class="checkbox"
+            src="../../assets/orders/order_check_normal@3x.png">
         </div>
-        <div class="right buttons">
-          <input-number v-model="cart.amount" />
-          <div @click="onEdit(cart)"
-            class="button center">
-            <img class="icon"
-              src="../../assets/orders/order_edit_icon@3x.png"> 编辑
+        <div class="content">
+          <div class="left">
+            <div class="image center">
+              <img :src="cart.icon">
+            </div>
+            <div class="detail">
+              <div class="name">{{cart.name}}</div>
+              <div class="price">{{cart.price}}</div>
+            </div>
+          </div>
+          <div class="right buttons">
+            <input-number v-model="cart.amount" />
+            <div @mouseover="showExtra(cart)"
+              @mouseout="hideExtra(cart)"
+              class="button center">
+              <img class="icon"
+                src="../../assets/orders/order_edit_icon@3x.png"> 编辑
+              <div v-show="cart.showExtra"
+                class="extras">
+                <div @click="onDiscount(cart)"
+                  class="center">
+                  <img class="icon"
+                    src="../../assets/orders/order_edit_price@3x.png"> 折扣
+                </div>
+                <div @click="onRemove(cart)"
+                  class="center">
+                  <img class="icon"
+                    src="../../assets/orders/order_edit_delete@3x.png"> 删除
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -55,6 +71,18 @@ export default {
     }
   },
   methods: {
+    onDiscount (cart) {
+      this.$emit('showEditPriceModal', cart)
+    },
+    async onRemove ({ id, amount }) {
+      const params = {
+        productId: id,
+        productNum: amount
+      }
+      const { result } = await editCart(params)
+      alert(result)
+      this.getCart()
+    },
     async getCart () {
       const params = {
         page: 1,
@@ -65,8 +93,33 @@ export default {
         ...others,
         amount: parseInt(productNum),
         price: price.toFixed(2),
-        selected: false
+        selected: false,
+        showExtra: false
       }))
+    },
+    showExtra ({ id: targetId }) {
+      this.carts = this.carts.map((cart) => {
+        const { id } = cart
+        if (id === targetId) {
+          return {
+            ...cart,
+            showExtra: true
+          }
+        }
+        return cart
+      })
+    },
+    hideExtra ({ id: targetId }) {
+      this.carts = this.carts.map((cart) => {
+        const { id } = cart
+        if (id === targetId) {
+          return {
+            ...cart,
+            showExtra: false
+          }
+        }
+        return cart
+      })
     },
     onToggle ({ id: targetId, selected }) {
       this.carts = this.carts.map((item) => {
@@ -110,8 +163,9 @@ export default {
         const params =
           carts
             .map(({ id, amount }) => ({ productId: id, productNum: amount }))
-        const { msg } = await createOrder(params)
+        const { msg, result: { id } } = await createOrder(params)
         alert(msg)
+        this.$router.push({ name: 'preview', query: { orderId: id } })
       } else {
         alert('请选择商品')
       }
@@ -126,10 +180,12 @@ export default {
 <style lang="less" scoped>
 .main-content {
   flex: 1;
-  height: 90vh;
-  overflow: auto;
-  padding-bottom: 80px;
   position: relative;
+  .wraper {
+    height: 90vh;
+    overflow: auto;
+    padding-bottom: 80px;
+  }
   .item {
     display: flex;
     align-items: center;
@@ -186,7 +242,8 @@ export default {
           .icon {
             width: 20px;
             height: 20px;
-            margin: 0 8px;
+            margin-right: 8px;
+            margin-left: -10px;
           }
           width: 170px;
           margin: 10px 0;
@@ -197,6 +254,24 @@ export default {
           color: #ab9d80;
           font-weight: bold;
           user-select: none;
+          position: relative;
+          .extras {
+            width: 100%;
+            position: absolute;
+            left: 0;
+            bottom: 100%;
+            z-index: 1;
+            border: 1px solid #ab9d80;
+            border-radius: 3px;
+            background-color: white;
+            margin-bottom: 4px;
+            div {
+              height: 40px;
+              &:nth-child(1) {
+                border-bottom: 1px solid #d5cebf;
+              }
+            }
+          }
         }
       }
     }
@@ -211,6 +286,7 @@ export default {
     align-items: center;
     padding-left: 50px;
     border-top: 1px solid #d8d8d8;
+    background-color: white;
     .amount-all {
       font-size: 15px;
       color: #787886;

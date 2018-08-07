@@ -1,5 +1,7 @@
 <template>
-  <modal>
+  <modal :visible.sync="visible"
+    v-if="visible"
+    @handleConfirm="handleConfirm">
     <div class="edit-price">
       <div class="tooltip">请输入折扣比例</div>
       <input placeholder="折扣比例"
@@ -13,6 +15,31 @@ import Modal from './modal'
 export default {
   components: {
     Modal
+  },
+  data () {
+    return {
+      visible: false,
+      cart: {}
+    }
+  },
+  watch: {
+    'visible' () {
+      if (this.visible === false) {
+        this.cart = {}
+      }
+    }
+  },
+  methods: {
+    showModal (cart) {
+      this.visible = true
+      this.cart = cart
+    },
+    hideModal () {
+      this.visible = false
+    },
+    handleConfirm () {
+
+    }
   }
 }
 </script>

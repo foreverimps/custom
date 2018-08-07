@@ -2,11 +2,11 @@
   <page name="订单">
     <div slot="right">东辰明瀚东环路店</div>
     <div class="orders">
-      <main-content/>
+      <main-content @showEditPriceModal="showEditPriceModal" />
       <recommend/>
     </div>
-    <!-- <auth-modal/> -->
-    <!-- <edit-price-modal/> -->
+    <auth-modal/>
+    <edit-price-modal ref="editPriceModal" />
   </page>
 </template>
 
@@ -22,6 +22,16 @@ export default {
     EditPriceModal,
     Recommend,
     MainContent
+  },
+  data () {
+    return {
+
+    }
+  },
+  methods: {
+    showEditPriceModal (cart) {
+      this.$refs.editPriceModal.showModal(cart)
+    }
   }
 }
 </script>

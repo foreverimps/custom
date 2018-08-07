@@ -4,16 +4,38 @@
     <div class="dialog">
       <div class="title center">
         <div class="name">系统提示</div>
-        <img class="close-button"
+        <img @click="onClose"
+          class="close-button"
           src="../../assets/modal/dialog_close_icon@3x.png">
       </div>
       <div class="content">
         <slot/>
-        <div class="confirm-button center">确认</div>
+        <div @click="onConfirm"
+          class="confirm-button center">确认</div>
       </div>
     </div>
   </div>
 </template>
+
+<script>
+export default {
+  props: {
+    visible: {
+      type: Boolean,
+      default: false
+    }
+  },
+  methods: {
+    onClose () {
+      this.$emit('update:visible', false)
+    },
+    onConfirm () {
+      this.$emit('handleConfirm')
+    }
+  }
+}
+</script>
+
 
 <style lang="less" scoped>
 .modal {

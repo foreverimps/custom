@@ -1,26 +1,32 @@
 <template>
   <div class="process center">
     <div class="line">
-      <div class="icon active center">
-        <img :src="activeImg">
+      <div @click="handleStep(0)"
+        :class="['icon','center',step===0?'active':undefined]">
+        <img :src="step===0?activeImg:normalImg">
       </div>
       <div class="divide"></div>
-      <div class="icon center">
-        <img :src="normalImg">
+      <div @click="handleStep(1)"
+        :class="['icon','center',step===1?'active':undefined]">
+        <img :src="step===1?activeImg:normalImg">
       </div>
       <div class="divide"></div>
-      <div class="icon center">
-        <img :src="normalImg">
+      <div @click="handleStep(2)"
+        :class="['icon','center',step===2?'active':undefined]">
+        <img :src="step===2?activeImg:normalImg">
       </div>
     </div>
     <div class="desc">
-      <div class="active left">
+      <div @click="handleStep(0)"
+        :class="[step===0?'active':undefined,'left']">
         联系电话
       </div>
-      <div class="normal middle">
+      <div @click="handleStep(1)"
+        :class="[step===1?'active':undefined,'middle']">
         配送地址
       </div>
-      <div class="normal right">
+      <div @click="handleStep(2)"
+        :class="[step===2?'active':undefined,'right']">
         备注信息
       </div>
     </div>
@@ -29,6 +35,17 @@
 
 <script>
 export default {
+  props: {
+    step: {
+      type: Number,
+      default: 0
+    }
+  },
+  methods: {
+    handleStep (step) {
+      // this.$emit('handleStep', step)
+    }
+  },
   data () {
     return {
       activeImg: require('../../assets/extra-data/pyment_information_step_ing@3x.png'),

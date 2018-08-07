@@ -2,12 +2,37 @@
   <div class="contact-handler center">
     <div class="form-item">
       <div class="label">联系电话：</div>
-      <input type="text"
+      <input v-model="phone"
+        type="text"
         placeholder="输入11位手机号码">
     </div>
-    <div class="button center">下一步</div>
+    <div @click="handlePhone"
+      class="button center">下一步</div>
   </div>
 </template>
+
+<script>
+import { setPhone } from './api'
+export default {
+  data () {
+    return {
+      phone: undefined
+    }
+  },
+  methods: {
+    async handlePhone () {
+      const params = {
+        receivingTel: this.phone,
+        orderId: this.$route.query.orderId
+      }
+      const { msg } = await setPhone(params)
+      alert(msg)
+      this.$emit('handleStep', 1)
+    }
+  }
+}
+</script>
+
 
 <style lang="less" scoped>
 .contact-handler {

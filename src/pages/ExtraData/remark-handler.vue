@@ -2,11 +2,34 @@
   <div class="remark-handler center">
     <div class="form-item">
       <div class="label">备注：</div>
-      <textarea></textarea>
+      <textarea v-model="remark"></textarea>
     </div>
-    <div class="button center">完成</div>
+    <div @click="onConfirm"
+      class="button center">完成</div>
   </div>
 </template>
+
+<script>
+import { setRemark } from './api'
+export default {
+  data () {
+    return {
+      remark: undefined
+    }
+  },
+  methods: {
+    async onConfirm () {
+      const params = {
+        remark: this.remark,
+        orderId: this.$route.query.orderId
+      }
+      const { msg } = await setRemark(params)
+      alert(msg)
+      this.$router.push({ name: 'home' })
+    }
+  }
+}
+</script>
 
 <style lang="less" scoped>
 .remark-handler {

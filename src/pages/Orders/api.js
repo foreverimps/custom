@@ -19,3 +19,9 @@ export const createOrder = async data =>
     method: 'post',
     data
   });
+
+export const getProducts = async () =>
+  await request({
+    url: `/api/activityProduct/get/ORDER`,
+    method: 'get'
+  });

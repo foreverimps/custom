@@ -7,23 +7,27 @@
         <div class="title">支付成功！</div>
         <div class="desc">谢谢您的惠顾，该单将于25个工作日内完成</div>
         <div class="buttons">
-          <div class="button center">完成</div>
-          <div class="button center">再来一单</div>
+          <div @click="toHome"
+            class="button center">完成</div>
+          <div @click="onAgain"
+            class="button center">再来一单</div>
         </div>
       </div>
       <div class="extra">
         <div class="ads">
           <img class="ad first"
-            src="../../assets/preview/pament_pic1@3x.png">
+            :src="ads[0]">
           <img class="ad"
-            src="../../assets/preview/pament_pic2@3x.png">
+            :src="ads[1]">
         </div>
         <div class="buttons">
-          <div class="button center">
+          <div @click="toExtra"
+            class="button center">
             <img class="icon"
               src="../../assets/preview/pament_information_icon@3x.png"> 补充资料
           </div>
-          <div class="button middle center">
+          <div @click="toService"
+            class="button middle center">
             <img class="icon"
               src="../../assets/preview/payment_about_service@3x.png"> 相关服务
           </div>
@@ -36,6 +40,36 @@
     </div>
   </page>
 </template>
+
+<script>
+import { getADs } from './api'
+export default {
+  data () {
+    return {
+      ads: []
+    }
+  },
+  methods: {
+    onAgain () {
+      this.$router.push({ name: 'orders' })
+    },
+    toHome () {
+      this.$router.push({ name: 'home' })
+    },
+    toExtra () {
+      this.$router.push({ name: 'extraData', query: { orderId: this.$route.query.orderId } })
+    },
+    toService () {
+      this.$router.push({ name: 'service' })
+    }
+  },
+  async created () {
+    const { result } = await getADs()
+    this.ads = result.map(({ icon }) => icon)
+  }
+}
+</script>
+
 
 <style lang="less" scoped>
 .content {

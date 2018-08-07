@@ -11,29 +11,33 @@
     <div class="title">
       推荐
     </div>
-    <div class="item">
+    <div v-for="product in products"
+      :key="product.id"
+      class="item">
       <div class="image">
-        <img src="../../assets/orders/f67c1913aa70bcccec928696db0f877d@3x.png">
+        <img :src="product.icon">
       </div>
-      <div class="name">东辰瞑瀚 美式loft实木电脑桌办公...</div>
-      <div class="price">965.00</div>
-    </div>
-    <div class="item">
-      <div class="image">
-        <img src="../../assets/orders/f67c1913aa70bcccec928696db0f877d@3x.png">
-      </div>
-      <div class="name">东辰瞑瀚 美式loft实木电脑桌办公...</div>
-      <div class="price">965.00</div>
-    </div>
-    <div class="item">
-      <div class="image">
-        <img src="../../assets/orders/f67c1913aa70bcccec928696db0f877d@3x.png">
-      </div>
-      <div class="name">东辰瞑瀚 美式loft实木电脑桌办公...</div>
-      <div class="price">965.00</div>
+      <div class="name">{{product.productName}}</div>
+      <div class="price">{{product.price}}</div>
     </div>
   </div>
 </template>
+
+<script>
+import { getProducts } from './api'
+export default {
+  data () {
+    return {
+      products: []
+    }
+  },
+  async created () {
+    const { result } = await getProducts()
+    this.products = result
+  }
+}
+</script>
+
 
 <style lang="less" scoped>
 .recommend {

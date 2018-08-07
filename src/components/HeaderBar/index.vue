@@ -7,11 +7,11 @@
         src="../../assets/home/home_logo@3x.png">
       <div @click="toBack"
         class="button">
-        返回
+        <img src="../../assets/header/nav_return_icon@3x.png"> 返回
       </div>
       <div @click="toHome"
         class="button">
-        首页
+        <img src="../../assets/header/nav_home_icon@3x.png"> 首页
       </div>
       <slot name="left" />
     </div>
@@ -99,6 +99,13 @@ export default {
     align-items: center;
     .button {
       margin: 0 25px;
+      display: flex;
+      align-items: center;
+      img {
+        width: 20px;
+        height: 20px;
+        margin-right: 5px;
+      }
     }
     .logo {
       width: 45px;
