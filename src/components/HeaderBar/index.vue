@@ -30,7 +30,7 @@
           class="drop-menu">
           <div @click="toOrders"
             class="order">订单</div>
-          <div>注销</div>
+          <div @click="onLogout">注销</div>
         </div>
       </div>
     </div>
@@ -38,6 +38,7 @@
 </template>
 
 <script>
+import { setLogout } from './api'
 export default {
   data () {
     return {
@@ -67,6 +68,10 @@ export default {
     },
     toHome () {
       this.$router.push({ name: 'home' })
+    },
+    async onLogout () {
+      const { msg } = await setLogout()
+      alert(msg)
     }
   }
 }

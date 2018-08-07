@@ -43,7 +43,7 @@ export default {
       if (isPhoneNumber) {
         const params = {
           phone: this.form.phone,
-          smsType: 1
+          smsType: 'LOGIN'
         }
         const { result } = await getSmsCode(params)
         alert(result)
