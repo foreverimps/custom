@@ -1,8 +1,8 @@
 <template>
   <div class="stars">
-    <img v-for="index in number"
+    <img v-for="index in getNumber()"
       :key="index"
-      src="../../assets/list/class_star.png">
+      src="../../assets/list/class_star copy@3x.png">
   </div>
 </template>
 
@@ -12,6 +12,11 @@ export default {
     number: {
       type: Number,
       default: 0
+    }
+  },
+  methods: {
+    getNumber () {
+      return parseInt(this.number) || 0
     }
   }
 }

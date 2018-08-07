@@ -17,23 +17,28 @@
           index===0 ? 'first' : undefined,
           item.id===undefined ? 'empty' : undefined
           ]">
-          <div v-if="item.id!==undefined"
+          <div class="outer"
+            v-if="item.id!==undefined"
             @click="toDetail(item)">
-            <div class="image">
-              <img :src="item.icon">
+            <div class="top">
+              <div class="image">
+                <img :src="item.icon">
+              </div>
+              <div class="name">{{item.name}}</div>
             </div>
-            <div class="name">{{item.name}}</div>
-            <div class="line">
-              <stars class="stars"
-                :number="item.starLevel" />
-              <div v-if="item.parentCode!==null"
-                class="button"
-                @click.stop="toCustom(item)">定制</div>
-            </div>
-            <div class="footer">
-              <div>热度 {{item.hotNum}}</div>
-              <div>排行 {{item.rankingNum}}</div>
-              <div>销量 {{item.saleNum}}</div>
+            <div class="bottom">
+              <div class="line">
+                <stars class="stars"
+                  :number="item.starLevel" />
+                <div v-if="item.parentCode!==null"
+                  class="button"
+                  @click.stop="toCustom(item)">定制</div>
+              </div>
+              <div class="footer">
+                <div>热度 {{item.hotNum}}</div>
+                <div>排行 {{item.rankingNum}}</div>
+                <div>销量 {{item.saleNum}}</div>
+              </div>
             </div>
           </div>
         </div>
@@ -58,6 +63,14 @@ import { getProducts } from './api'
 export default {
   components: {
     Stars
+  },
+  props: {
+    itemCategory: {
+      type: {
+        type: String,
+        default: undefined
+      }
+    }
   },
   data () {
     return {
@@ -161,50 +174,61 @@ export default {
         border-right: 1px solid #ccc;
         padding: 0 12px;
         border-bottom: 1px solid #ccc;
+        display: flex;
         &.first {
           border-left: 1px solid #ccc;
         }
         &.empty {
           border: none;
         }
-        .image {
-          height: 250px;
-          display: flex;
-          justify-content: center;
-          align-items: center;
-        }
-        .name {
-          color: #333333;
-          font-weight: bold;
-          margin: 15px 0;
-          max-width: 250px;
-          overflow: hidden;
-          text-overflow: ellipsis;
-          white-space: nowrap;
-        }
-        .line {
+        .outer {
+          flex: 1;
           display: flex;
           justify-content: space-between;
-          align-items: center;
-          .button {
-            width: 135px;
-            height: 40px;
-            background-color: #e3cda1;
-            border-radius: 3px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            color: #4e312f;
+          flex-direction: column;
+          .top {
+            .image {
+              height: 250px;
+              display: flex;
+              justify-content: center;
+              align-items: center;
+            }
+            .name {
+              color: #333333;
+              font-weight: bold;
+              margin: 15px 0;
+              max-width: 10rem;
+              // overflow: hidden;
+              // text-overflow: ellipsis;
+              // white-space: nowrap;
+            }
           }
-        }
-        .footer {
-          display: flex;
-          justify-content: space-around;
-          align-items: center;
-          font-size: 12px;
-          color: #999999;
-          margin-top: 25px;
-          margin-bottom: 15px;
+          .bottom {
+            .line {
+              display: flex;
+              justify-content: space-between;
+              align-items: center;
+              .button {
+                width: 135px;
+                height: 40px;
+                background-color: #e3cda1;
+                border-radius: 3px;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                color: #4e312f;
+              }
+            }
+            .footer {
+              display: flex;
+              justify-content: space-around;
+              align-items: center;
+              font-size: 12px;
+              color: #999999;
+              margin-top: 25px;
+              margin-bottom: 15px;
+            }
+          }
         }
       }
     }

@@ -10,8 +10,8 @@
     </div>
     <div class="content">
       <areas/>
-      <categorys/>
-      <main-menu/>
+      <categorys :itemCategory.sync="itemCategory" />
+      <main-menu :itemCategory="itemCategory" />
     </div>
   </page>
 </template>
@@ -29,11 +29,10 @@ export default {
   },
   data () {
     return {
-
+      itemCategory: undefined
     }
   },
   methods: {
-
   }
 }
 </script>

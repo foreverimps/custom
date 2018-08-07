@@ -60,8 +60,8 @@ export default {
             phone: this.form.phone,
             smsCode: this.form.smsCode
           }
-          const { result } = await loginByPhone(params)
-          localStorage.setItem('token', result)
+          const { result: { token } } = await loginByPhone(params)
+          localStorage.setItem('token', token)
           this.$router.push({ name: 'home' })
         } else {
           alert('请输入正确的手机号或验证码')

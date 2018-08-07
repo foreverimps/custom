@@ -2,7 +2,8 @@
   <div class="sorts">
     <div v-for="(category,index) in categorys"
       :key="index"
-      class="item">
+      @click="onSelect(category)"
+      :class="['item',itemCategory===category.val?'active':undefined]">
       <img :src="category.icon"> {{category.shortName}}
     </div>
   </div>
@@ -10,16 +11,28 @@
 
 <script>
 import { getCategorys } from './api'
+
 export default {
+  props: {
+    itemCategory: {
+      type: {
+        type: String,
+        default: undefined
+      }
+    }
+  },
   data () {
     return {
-      categorys: []
+      categorys: [],
     }
   },
   methods: {
     async getCategorys () {
       const { result } = await getCategorys()
       this.categorys = result
+    },
+    onSelect ({ val }) {
+      this.$emit('update:itemCategory', val)
     }
   },
   created () {
@@ -41,8 +54,12 @@ export default {
     padding-left: 30px;
     display: flex;
     align-items: center;
-    color: #cab58c;
+    font-weight: bold;
+    color: #333333;
     margin-bottom: 25px;
+    &.active {
+      color: #cab58c;
+    }
     img {
       width: 30px;
       height: 30px;
